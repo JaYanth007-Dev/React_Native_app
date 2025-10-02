@@ -7,18 +7,26 @@ import GameScreen from './src/screens/GameScreen';
 import { SafeAreaView } from "react-native-safe-area-context"
 import Colors from './src/constants/Colors';
 import GameOverScreen from './src/screens/GameOverScreen';
-
+import {useFonts} from "expo-font"
 export default function App() {
   const [userValue, setUserValue] = useState();
   const [gameIsOver, setGameIsOver] = useState(true);
+  const [guessRounds,setGuessRounds] = useState(0);
   
   const pickedValueHandler = (pickedValue) => {
     setUserValue(pickedValue)
     setGameIsOver(false);
   }
 
-  const gameOverHandler = () => {
+  const gameOverHandler = (noOfRounds) => {
     setGameIsOver(true);
+    setGuessRounds(noOfRounds);
+  }
+
+  const startNewGameHandler = () => {
+    setUserValue(null);
+    setGuessRounds(0);
+
   }
 
   let screen = <StartGameScreen handlePickedValue={pickedValueHandler} />
@@ -29,7 +37,7 @@ export default function App() {
   }
 
   if (gameIsOver && userValue) {
-    screen=<GameOverScreen/>
+    screen=<GameOverScreen userNumber={userValue} roundsNUmber={guessRounds} onStartNewGame={startNewGameHandler} />
   }
 
 
