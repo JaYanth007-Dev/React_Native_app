@@ -42,17 +42,22 @@ export default function App() {
 
 
   return (
-    <LinearGradient colors={[Colors.primary700, Colors.primaryYellow]} style={styles.rootScreen}>
-      <ImageBackground source={require("./src/assets/dices.jpg")}
-        resizeMode="cover"
-        style={styles.imgBackground}
-        imageStyle={styles.backgroundImage}
-      
+    <>
+      <StatusBar style='light'/>
+      <LinearGradient
+        colors={[Colors.primary700, Colors.primaryYellow]}
+        style={styles.rootScreen}
       >
-        <SafeAreaView style={styles.rootScreen}>{ screen}</SafeAreaView>
-  
-      </ImageBackground>
-    </LinearGradient>
+        <ImageBackground
+          source={require("./src/assets/dices.jpg")}
+          resizeMode="cover"
+          style={styles.imgBackground}
+          imageStyle={styles.backgroundImage}
+        >
+          <SafeAreaView style={styles.rootScreen}>{screen}</SafeAreaView>
+        </ImageBackground>
+      </LinearGradient>
+    </>
   );
 }
 
