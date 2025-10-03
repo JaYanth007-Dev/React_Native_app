@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { View, Text, StyleSheet, Alert,FlatList } from "react-native";
+import { View, Text, StyleSheet, Alert,FlatList,useWindowDimensions } from "react-native";
 import Title from "../components/UI/Title";
 import NumberContainer from "../components/game/NumberContainer";
 import PrimaryButton from "./../components/UI/PrimaryButton";
@@ -25,7 +25,8 @@ const GameScreen = ({ userNumber, onGameOver }) => {
     userNumber
   );
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
-  const [guessRounds, setGuessRounds] = useState([initialGuess]);
+    const [guessRounds, setGuessRounds] = useState([initialGuess]);
+    const {width,height}=useWindowDimensions()
   useEffect(() => {
       if (currentGuess === userNumber) {
           onGameOver(guessRounds.length);
@@ -63,27 +64,55 @@ const GameScreen = ({ userNumber, onGameOver }) => {
     
     const guessRoundsListLength = guessRounds.length;
 
+    let content = (
+      <>
+        <NumberContainer>{currentGuess}</NumberContainer>
+        <Card>
+          <InstructionText style={style.instructionText}>
+            Higher or Lower?
+          </InstructionText>
+          <View style={style.buttonsContainer}>
+            <View style={style.buttonContainer}>
+              <PrimaryButton onPress={nextGuessHandler.bind(this, "lower")}>
+                <Ionicons name="remove" size={24} color="white" />
+              </PrimaryButton>
+            </View>
+            <View style={style.buttonContainer}>
+              <PrimaryButton onPress={nextGuessHandler.bind(this, "greater")}>
+                <Ionicons name="add" size={24} color="white" />
+              </PrimaryButton>
+            </View>
+          </View>
+        </Card>
+      </>
+    );
+
+    if (width > 500) {
+        content = 
+          <>
+            <InstructionText style={style.instructionText}>
+              Higher or Lower?
+            </InstructionText>
+            <View style={style.buttonsContainerWide}>
+              <View style={style.buttonContainer}>
+                <PrimaryButton onPress={nextGuessHandler.bind(this, "lower")}>
+                  <Ionicons name="remove" size={24} color="white" />
+                </PrimaryButton>
+              </View>
+              <NumberContainer>{currentGuess}</NumberContainer>
+              <View style={style.buttonContainer}>
+                <PrimaryButton onPress={nextGuessHandler.bind(this, "greater")}>
+                  <Ionicons name="add" size={24} color="white" />
+                </PrimaryButton>
+              </View>
+            </View>
+          </>
+    }
+
   return (
     <View style={style.screen}>
       <Title>Opponent Guess</Title>
-      <NumberContainer>{currentGuess}</NumberContainer>
-      <Card>
-        <InstructionText style={style.instructionText}>
-          Higher or Lower?
-        </InstructionText>
-        <View style={style.buttonsContainer}>
-          <View style={style.buttonContainer}>
-            <PrimaryButton onPress={nextGuessHandler.bind(this, "lower")}>
-              <Ionicons name="remove" size={24} color="white" />
-            </PrimaryButton>
-          </View>
-          <View style={style.buttonContainer}>
-            <PrimaryButton onPress={nextGuessHandler.bind(this, "greater")}>
-              <Ionicons name="add" size={24} color="white" />
-            </PrimaryButton>
-          </View>
-        </View>
-      </Card>
+      {content}
       <View style={style.listItems}>
         <FlatList
           data={guessRounds}
@@ -106,18 +135,23 @@ const style = StyleSheet.create({
   screen: {
     flex: 1,
     padding: 24,
+    alignItems: "center",
   },
   buttonsContainer: {
     flexDirection: "row",
   },
   buttonContainer: {
-        flex: 1,
-    },
-    instructionText: {
-      marginBottom:12
-    },
-    listItems: {
-        flex: 1,
-       padding:16 
+    flex: 1,
+  },
+  instructionText: {
+    marginBottom: 12,
+  },
+  listItems: {
+    flex: 1,
+    padding: 16,
+  },
+    buttonsContainerWide: {
+        flexDirection: 'row',
+        alignItems: "center",
     }
 });
